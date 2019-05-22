@@ -1,0 +1,14 @@
+{
+  "name": "pickle-user",
+  "version": "0.0.1",
+  "description": "pickle user authentication system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodgroup/pickle-user"
+  },
+  "author": "NOD Digital",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
+}
