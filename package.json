@@ -6,10 +6,26 @@
     "type": "git",
     "url": "https://github.com/nodgroup/pickle-user"
   },
+  "scripts": {
+    "start": "yarn serve",
+    "serve": "node dist/server.js",
+    "build": "yarn build-ts && yarn tslint",
+    "build-ts": "rm -rf dist && tsc",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "watch": "yarn build-ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
+    "watch-node": "nodemon dist/server.js",
+    "watch-ts": "tsc -w"
+  },
   "author": "NOD Digital",
   "license": "MIT",
   "devDependencies": {
+    "@types/graphql": "^14.2.0",
+    "nodemon": "^1.19.0",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "apollo-server": "^2.5.0",
+    "graphql": "^14.3.0"
   }
 }

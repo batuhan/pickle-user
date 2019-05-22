@@ -4,5 +4,8 @@
 # Modules
 node_modules
 
+# Compiled files
+dist
+
 # Log files
 *.log
