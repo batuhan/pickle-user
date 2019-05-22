@@ -1,11 +1,14 @@
 # IDE files
 .idea
 
-# Modules
+# modules
 node_modules
 
-# Compiled files
+# compiled files
 dist
 
-# Log files
+# log files
 *.log
+
+# jest coverage results
+coverage

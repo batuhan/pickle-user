@@ -6,6 +6,8 @@
     "type": "git",
     "url": "https://github.com/nodgroup/pickle-user"
   },
+  "author": "NOD Digital",
+  "license": "MIT",
   "scripts": {
     "start": "yarn serve",
     "serve": "node dist/server.js",
@@ -14,13 +16,17 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "watch": "yarn build-ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-node": "nodemon dist/server.js",
-    "watch-ts": "tsc -w"
+    "watch-ts": "tsc -w",
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
+    "watch-test": "yarn test -- --watchAll"
   },
-  "author": "NOD Digital",
-  "license": "MIT",
   "devDependencies": {
     "@types/graphql": "^14.2.0",
+    "@types/jest": "^24.0.13",
+    "apollo-server-testing": "^2.5.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.19.0",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   },
