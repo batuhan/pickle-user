@@ -11,10 +11,10 @@
   "scripts": {
     "start": "yarn serve",
     "serve": "node dist/server.js",
-    "build": "yarn build-ts && yarn tslint",
+    "build": "yarn prettier && yarn build-ts",
+    "prettier": "prettier --write ./**/*.ts",
     "build-ts": "rm -rf dist && tsc",
-    "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "watch": "yarn build-ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
+    "watch": "yarn build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "tsc -w",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
@@ -26,8 +26,8 @@
     "apollo-server-testing": "^2.5.0",
     "jest": "^24.8.0",
     "nodemon": "^1.19.0",
+    "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   },
   "dependencies": {
