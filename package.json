@@ -11,8 +11,8 @@
   "scripts": {
     "start": "yarn serve",
     "serve": "node dist/server.js",
-    "build": "yarn prettier && yarn build-ts",
-    "prettier": "prettier --write ./**/*.ts",
+    "build": "yarn pretty-quick && yarn build-ts",
+    "prettier": "prettier --write \"**/*\" --ignore-path .gitignore",
     "build-ts": "rm -rf dist && tsc",
     "watch": "yarn build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-node": "nodemon dist/server.js",
@@ -20,13 +20,20 @@
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "watch-test": "yarn test -- --watchAll"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
     "@types/graphql": "^14.2.0",
     "@types/jest": "^24.0.13",
     "apollo-server-testing": "^2.5.0",
+    "husky": "^2.3.0",
     "jest": "^24.8.0",
     "nodemon": "^1.19.0",
     "prettier": "^1.17.1",
+    "pretty-quick": "^1.11.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
   },
