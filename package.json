@@ -9,16 +9,13 @@
   "author": "NOD Digital",
   "license": "MIT",
   "scripts": {
-    "start": "yarn serve",
-    "serve": "node dist/server.js",
-    "build": "yarn pretty-quick && yarn build-ts",
-    "prettier": "prettier --write \"**/*\" --ignore-path .gitignore",
-    "build-ts": "rm -rf dist && tsc",
-    "watch": "yarn build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
-    "watch-node": "nodemon dist/server.js",
-    "watch-ts": "tsc -w",
+    "start": "ts-node src/server.ts",
+    "watch": "ts-node-dev --respawn --transpileOnly src/server.ts",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
-    "watch-test": "yarn test -- --watchAll"
+    "watch-test": "yarn test -- --watchAll",
+    "pretty-quick": "pretty-quick",
+    "prettier": "prettier --write \"**/*\" --ignore-path .gitignore",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "husky": {
     "hooks": {
@@ -35,10 +32,15 @@
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
     "ts-jest": "^24.0.2",
+    "ts-node-dev": "^1.0.0-pre.39",
     "typescript": "^3.4.5"
   },
   "dependencies": {
     "apollo-server": "^2.5.0",
-    "graphql": "^14.3.0"
+    "graphql": "^14.3.0",
+    "pg": "^7.11.0",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.1.0",
+    "typeorm": "^0.2.17"
   }
 }
