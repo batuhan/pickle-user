@@ -2,12 +2,21 @@
 
 User service for the Pickle Platform
 
-`yarn build` to build
+##### To start developing
 
-`yarn build && yarn start` to start
+`docker run --name pickle-user-postgres -p 5432:5432 -e POSTGRES_DB="pickle-user" -d postgres`
+to generate a posgres container
+
+`yarn watch` to start a development environment
+
+##### Other commands
+
+`yarn start` to start
 
 `yarn test` to run the tests with coverage
 
 `yarn watch-test` to watch tests
 
-`yarn watch` to build and start a development environment
+`yarn typeorm migration:generate -n migrationNameHere` to generate migrations
+
+`yarn typeorm migration:run` to run migrations
