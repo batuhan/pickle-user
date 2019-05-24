@@ -11,7 +11,7 @@ to generate a posgres container
 
 ##### Other commands
 
-`yarn start` to start
+`yarn build && yarn start` to build and start
 
 `yarn test` to run the tests with coverage
 
