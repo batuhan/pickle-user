@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server";
+import { ApolloServer, gql, ServerInfo } from "apollo-server";
 
 // This is a (sample) collection of books we'll be able to query
 // the GraphQL server for.  A more complete example might fetch
@@ -47,9 +47,9 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 // This `listen` method launches a web-server.  Existing apps
 // can utilize middleware options, which we'll discuss later.
-server.listen().then(({ url }) => {
+server.listen().then((serverInfo: ServerInfo) => {
   // tslint:disable-next-line:no-console
-  console.log(`Server ready at ${url}`);
+  console.log(`Server ready at ${serverInfo.url}`);
 });
 
 export default server;
