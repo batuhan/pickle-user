@@ -1,9 +1,8 @@
 import { ApolloServer, gql } from "apollo-server";
-import index from "./index";
 import { createConnection } from "typeorm";
 
 // init db connection from ormconfig.json
-createConnection().then(() => index());
+createConnection().then();
 
 const books = [
   {
