@@ -1,5 +1,5 @@
 import { createTestClient } from "apollo-server-testing";
-import server from "../src/server";
+import server from "../src/app";
 
 const { query } = createTestClient(server);
 
