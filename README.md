@@ -13,6 +13,9 @@ to generate a posgres container
 
 `yarn build && yarn start` to build and start
 
+`docker run --name pickle-user-postgres-test -p 5433:5432 -e POSTGRES_DB="pickle-user-test" -d postgres`
+to initialize test database
+
 `yarn test` to run the tests with coverage
 
 `yarn watch-test` to watch tests
