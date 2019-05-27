@@ -12,12 +12,8 @@ export class User extends PickleUserBaseEntity {
   password!: string;
 
   @BeforeInsert()
-  async bI() {
-    this.password = await hash(this.password);
-  }
-
   @BeforeUpdate()
-  async bU() {
+  async userHooks() {
     this.password = await hash(this.password);
   }
 }
