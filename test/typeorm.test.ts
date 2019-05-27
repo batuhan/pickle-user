@@ -4,6 +4,7 @@ import { Role } from "../src/entity/Role";
 import { RolePermission } from "../src/entity/RolePermission";
 import { User } from "../src/entity/User";
 import { UserRole } from "../src/entity/UserRole";
+import argon2 from "argon2";
 
 describe("typeorm test", () => {
   const email = "email";
@@ -215,7 +216,77 @@ describe("typeorm test", () => {
   //   expect(userRole.id).toBeFalsy();
   // });
 
-  // TODO user password should be hashed in hook
+  it("should hash user password", async function() {
+    const user = new User();
+    user.email = email + "hashedPassword";
+    user.password = password;
+    await user.save();
+    console.log(user.password);
+    expect(await argon2.verify(user.password, password)).toEqual(true);
+  });
+
+  it("should hash user password after update", async function() {
+    const arg = "hashedPasswordAfterUpdate";
+    const user = new User();
+    user.email = email + arg;
+    user.password = password;
+    await user.save();
+    user.password = password + arg;
+    await user.save();
+    expect(await argon2.verify(user.password, password + arg)).toEqual(true);
+  });
+
+  // TODO reimplement in apollo layer
+  // it("should fail to create user with 7 length password", async function() {
+  //   expect.assertions(1);
+  //   try {
+  //     const arg = "passwor";
+  //     const user = new User();
+  //     user.email = email + arg;
+  //     user.password = arg;
+  //     await user.save();
+  //   } catch (e) {
+  //     expect(e.message).toEqual(
+  //       "Password must be between 8 and 160 characters"
+  //     );
+  //   }
+  // });
+  //
+  // it("should create user with 8 length password", async function() {
+  //   const arg = password;
+  //   expect(password.length).toEqual(8);
+  //   const user = new User();
+  //   user.email = email + arg;
+  //   user.password = arg;
+  //   await user.save();
+  //   expect(user.id).toBeTruthy();
+  // });
+  //
+  // it("should fail to create user with 161 length password", async function() {
+  //   expect.assertions(2);
+  //   const arg = password.repeat(20) + "p";
+  //   expect(arg.length).toEqual(161);
+  //   try {
+  //     const user = new User();
+  //     user.email = email + arg;
+  //     user.password = arg;
+  //     await user.save();
+  //   } catch (e) {
+  //     expect(e.message).toEqual(
+  //       "Password must be between 8 and 160 characters"
+  //     );
+  //   }
+  // });
+  //
+  // it("should create user with 160 length password", async function() {
+  //   const arg = password.repeat(20);
+  //   expect(arg.length).toEqual(160);
+  //   const user = new User();
+  //   user.email = email + arg;
+  //   user.password = arg;
+  //   await user.save();
+  //   expect(user.id).toBeTruthy();
+  // });
 
   it("should create RolePermission", async function() {
     const rolePermission = new RolePermission();
