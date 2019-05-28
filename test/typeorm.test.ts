@@ -221,7 +221,6 @@ describe("typeorm test", () => {
     user.email = email + "hashedPassword";
     user.password = password;
     await user.save();
-    console.log(user.password);
     expect(await argon2.verify(user.password, password)).toEqual(true);
   });
 
