@@ -2,7 +2,9 @@ import { ApolloServer, gql } from "apollo-server";
 import { createConnection } from "typeorm";
 
 // init db connection from ormconfig.json
-createConnection().then();
+if (process.env.NODE_ENV !== "test") {
+  createConnection().then();
+}
 
 const books = [
   {
