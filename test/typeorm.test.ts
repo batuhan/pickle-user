@@ -1,15 +1,22 @@
-import "./init";
+import argon2 from "argon2";
 import { Permission } from "../src/entity/Permission";
 import { Role } from "../src/entity/Role";
 import { RolePermission } from "../src/entity/RolePermission";
 import { User } from "../src/entity/User";
 import { UserRole } from "../src/entity/UserRole";
-import argon2 from "argon2";
-
-const email = "email";
-const password = "password";
-const roleName = "roleName";
-const permissionName = "permissionName";
+import {
+  createPermission,
+  createRole,
+  createRolePermission,
+  createUser,
+  createUserRole,
+  delay,
+  email,
+  password,
+  permissionName,
+  roleName
+} from "./helpers";
+import "./init";
 
 describe("typeorm test", () => {
   it("should create user", async function() {
@@ -291,40 +298,3 @@ describe("typeorm test", () => {
     ).toBeTruthy();
   });
 });
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function createUser() {
-  const user = new User();
-  user.email = email;
-  user.password = password;
-  return await user.save();
-}
-
-async function createRole() {
-  const role = new Role();
-  role.name = roleName;
-  return await role.save();
-}
-
-async function createPermission() {
-  const permission = new Permission();
-  permission.name = permissionName;
-  return await permission.save();
-}
-
-async function createUserRole() {
-  const userRole = new UserRole();
-  userRole.user = await createUser();
-  userRole.role = await createRole();
-  return await userRole.save();
-}
-
-async function createRolePermission() {
-  const rolePermission = new RolePermission();
-  rolePermission.role = await createRole();
-  rolePermission.permission = await createPermission();
-  return await rolePermission.save();
-}
