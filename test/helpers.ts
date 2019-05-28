@@ -3,6 +3,7 @@ import { Role } from "../src/entity/Role";
 import { RolePermission } from "../src/entity/RolePermission";
 import { User } from "../src/entity/User";
 import { UserRole } from "../src/entity/UserRole";
+import crypto from "crypto";
 
 export const email = "email";
 export const password = "password";
@@ -13,6 +14,10 @@ export function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function generate_random_string(bytes: number) {
+  return crypto.randomBytes(bytes).toString("hex");
+}
+
 export async function createUser() {
   const user = new User();
   user.email = email;
@@ -20,10 +25,27 @@ export async function createUser() {
   return await user.save();
 }
 
+export async function populateUsers(amount: number) {
+  for (let i = 0; i < amount; i++) {
+    const user = new User();
+    user.email = generate_random_string(5);
+    user.password = password;
+    await user.save();
+  }
+}
+
 export async function createRole() {
   const role = new Role();
   role.name = roleName;
   return await role.save();
+}
+
+export async function populateRoles(amount: number) {
+  for (let i = 0; i < amount; i++) {
+    const role = new Role();
+    role.name = generate_random_string(5);
+    await role.save();
+  }
 }
 
 export async function createPermission() {
