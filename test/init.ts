@@ -1,10 +1,9 @@
-// global test init file
-
-// init connection to db
 import { Connection, createConnection } from "typeorm";
+// global test init file
+// init connection to db
 
 let connection: Connection;
-beforeAll(async () => {
+beforeEach(async () => {
   connection = await createConnection(
     Object.assign({}, require("./../ormconfig.json"), {
       database: "pickle-user-test",
@@ -15,6 +14,6 @@ beforeAll(async () => {
   );
 });
 
-afterAll(async () => {
+afterEach(async () => {
   await connection.close();
 });
