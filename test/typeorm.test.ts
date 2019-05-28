@@ -1,4 +1,4 @@
-import { Connection, createConnection } from "typeorm";
+import "./init";
 import { Permission } from "../src/entity/Permission";
 import { Role } from "../src/entity/Role";
 import { RolePermission } from "../src/entity/RolePermission";
@@ -11,23 +11,6 @@ describe("typeorm test", () => {
   const password = "password";
   const roleName = "roleName";
   const permissionName = "permissionName";
-
-  // init connection to db
-  let connection: Connection;
-  beforeAll(async () => {
-    connection = await createConnection(
-      Object.assign({}, require("./../ormconfig.json"), {
-        database: "pickle-user-test",
-        dropSchema: true,
-        port: 5433,
-        entities: ["src/entity/**/*.ts"]
-      })
-    );
-  });
-
-  afterAll(async () => {
-    await connection.close();
-  });
 
   it("should create user", async function() {
     const user = new User();
