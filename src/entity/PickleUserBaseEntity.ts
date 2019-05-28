@@ -8,7 +8,7 @@ import {
 
 export class PickleUserBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: number;
+  id!: string;
 
   @Column({ default: true })
   isActive!: boolean;
