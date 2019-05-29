@@ -19,7 +19,8 @@
     "test": "jest --coverage --verbose --detectOpenHandles -c jest.config.js",
     "watch-test": "yarn test --watchAll",
     "format": "prettier --write \"./**/*\" --ignore-path .gitignore",
-    "lint-fix": "eslint . --fix --ignore-path .gitignore --ext .ts,.js --max-warnings 0",
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.js --max-warnings 0",
+    "lint-fix": "yarn lint --fix",
     "pre-commit": "lint-staged -c .lint-stagedrc.yml && pretty-quick"
   },
   "devDependencies": {
