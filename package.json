@@ -11,54 +11,32 @@
   "scripts": {
     "start": "yarn serve",
     "serve": "node dist/server.js",
-    "build": "yarn pretty-quick && yarn build-ts",
+    "build": "yarn build-ts",
     "build-ts": "rm -rf dist && tsc",
     "watch": "yarn build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "tsc -w",
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
+    "test": "jest --coverage --verbose --detectOpenHandles -c jest.config.js",
     "watch-test": "yarn test --watchAll",
-    "pretty-quick": "pretty-quick",
-    "prettier": "prettier --write \"**/*\" --ignore-path .gitignore"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "**/test/**/*.test.(ts|js)"
-    ],
-    "testEnvironment": "node",
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "format": "prettier --write \"./**/*\" --ignore-path .gitignore",
+    "lint-fix": "eslint . --fix --ignore-path .gitignore --ext .ts,.js --max-warnings 0",
+    "pre-commit": "lint-staged -c .lint-stagedrc.yml && pretty-quick"
   },
   "devDependencies": {
     "@types/graphql": "^14.2.0",
     "@types/jest": "^24.0.13",
     "@types/lodash": "^4.14.132",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "apollo-server-testing": "^2.5.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.6.4",
     "husky": "^2.3.0",
     "jest": "^24.8.0",
+    "lint-staged": ">=8",
     "nodemon": "^1.19.0",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
@@ -69,6 +47,7 @@
     "apollo-server": "^2.5.0",
     "argon2": "^0.23.0",
     "graphql": "^14.3.0",
+    "lodash": "^4.17.11",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.17"
