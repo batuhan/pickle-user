@@ -1,17 +1,17 @@
-import { Entity, ManyToOne } from "typeorm";
-import { Permission } from "./Permission";
-import { PickleUserBaseEntity } from "./PickleUserBaseEntity";
-import { Role } from "./Role";
+import { Entity, ManyToOne, ObjectType } from "typeorm";
+import Permission from "./Permission";
+import PickleUserBaseEntity from "./PickleUserBaseEntity";
+import Role from "./Role";
 
 @Entity()
-export class RolePermission extends PickleUserBaseEntity {
-  @ManyToOne(() => Role, { nullable: false })
-  role!: Role;
+export default class RolePermission extends PickleUserBaseEntity {
+  @ManyToOne((): ObjectType<Role> => Role, { nullable: false })
+  public role!: Role;
 
-  @ManyToOne(() => Permission, { nullable: false })
-  permission!: Permission;
+  @ManyToOne((): ObjectType<Permission> => Permission, { nullable: false })
+  public permission!: Permission;
 
-  static findAll() {
+  public static findAll(): Promise<RolePermission[]> {
     return this.createQueryBuilder("rolePermission")
       .leftJoinAndSelect("rolePermission.permission", "permission")
       .leftJoinAndSelect("rolePermission.role", "role")
