@@ -1,39 +1,26 @@
-import { Connection, createConnection } from "typeorm";
+import argon2 from "argon2";
 import { Permission } from "../src/entity/Permission";
 import { Role } from "../src/entity/Role";
 import { RolePermission } from "../src/entity/RolePermission";
 import { User } from "../src/entity/User";
 import { UserRole } from "../src/entity/UserRole";
-import argon2 from "argon2";
+import {
+  createPermission,
+  createRole,
+  createRolePermission,
+  createUser,
+  createUserRole,
+  delay,
+  email,
+  password,
+  permissionName,
+  roleName
+} from "./helpers";
+import "./init";
 
 describe("typeorm test", () => {
-  const email = "email";
-  const password = "password";
-  const roleName = "roleName";
-  const permissionName = "permissionName";
-
-  // init connection to db
-  let connection: Connection;
-  beforeAll(async () => {
-    connection = await createConnection(
-      Object.assign({}, require("./../ormconfig.json"), {
-        database: "pickle-user-test",
-        dropSchema: true,
-        port: 5433,
-        entities: ["src/entity/**/*.ts"]
-      })
-    );
-  });
-
-  afterAll(async () => {
-    await connection.close();
-  });
-
   it("should create user", async function() {
-    const user = new User();
-    user.email = email;
-    user.password = password;
-    await user.save();
+    const user = await createUser();
     expect(user.id).toBeTruthy();
   });
 
@@ -66,10 +53,8 @@ describe("typeorm test", () => {
   it("should fail while creating user because of duplicate email", async function() {
     expect.assertions(1);
     try {
-      const user = new User();
-      user.email = email;
-      user.password = password;
-      await user.save();
+      await createUser();
+      await createUser();
     } catch (e) {
       expect(e.message).toMatch(
         "duplicate key value violates unique constraint"
@@ -120,9 +105,8 @@ describe("typeorm test", () => {
   it("should fail creating role because of duplicate name", async function() {
     expect.assertions(1);
     try {
-      const role = new Role();
-      role.name = roleName;
-      await role.save();
+      await createRole();
+      await createRole();
     } catch (e) {
       expect(e.message).toMatch(
         "duplicate key value violates unique constraint"
@@ -152,9 +136,8 @@ describe("typeorm test", () => {
   it("should fail creating permission because of duplicate name", async function() {
     expect.assertions(1);
     try {
-      const permission = new Permission();
-      permission.name = permissionName;
-      await permission.save();
+      await createPermission();
+      await createPermission();
     } catch (e) {
       expect(e.message).toMatch(
         "duplicate key value violates unique constraint"
@@ -163,12 +146,7 @@ describe("typeorm test", () => {
   });
 
   it("should create UserRole", async function() {
-    const userRole = new UserRole();
-    const users = await User.find();
-    const roles = await Role.find();
-    userRole.user = users[0];
-    userRole.role = roles[0];
-    await userRole.save();
+    const userRole = await createUserRole();
     expect(userRole.id).toBeTruthy();
   });
 
@@ -190,8 +168,7 @@ describe("typeorm test", () => {
     expect.assertions(1);
     try {
       const userRole = new UserRole();
-      const users = await User.find();
-      userRole.user = users[0];
+      userRole.user = await createUser();
       await userRole.save();
     } catch (e) {
       expect(e.message).toEqual(
@@ -201,6 +178,7 @@ describe("typeorm test", () => {
   });
 
   it("should get users and roles with join from UserRole", async function() {
+    await createUserRole();
     const userRoles = await UserRole.findAll();
     expect(userRoles[0].role && userRoles[0].user).toBeTruthy();
   });
@@ -217,19 +195,13 @@ describe("typeorm test", () => {
   // });
 
   it("should hash user password", async function() {
-    const user = new User();
-    user.email = email + "hashedPassword";
-    user.password = password;
-    await user.save();
+    const user = await createUser();
     expect(await argon2.verify(user.password, password)).toEqual(true);
   });
 
   it("should hash user password after update", async function() {
     const arg = "hashedPasswordAfterUpdate";
-    const user = new User();
-    user.email = email + arg;
-    user.password = password;
-    await user.save();
+    const user = await createUser();
     user.password = password + arg;
     await user.save();
     expect(await argon2.verify(user.password, password + arg)).toEqual(true);
@@ -288,12 +260,7 @@ describe("typeorm test", () => {
   // });
 
   it("should create RolePermission", async function() {
-    const rolePermission = new RolePermission();
-    const roles = await Role.find();
-    const permissions = await Permission.find();
-    rolePermission.role = roles[0];
-    rolePermission.permission = permissions[0];
-    await rolePermission.save();
+    const rolePermission = await createRolePermission();
     expect(rolePermission.id).toBeTruthy();
   });
 
@@ -301,8 +268,7 @@ describe("typeorm test", () => {
     expect.assertions(1);
     try {
       const rolePermission = new RolePermission();
-      const roles = await Role.find();
-      rolePermission.role = roles[0];
+      rolePermission.role = await createRole();
       await rolePermission.save();
     } catch (e) {
       expect(e.message).toEqual(
@@ -315,8 +281,7 @@ describe("typeorm test", () => {
     expect.assertions(1);
     try {
       const rolePermission = new RolePermission();
-      const permissions = await Permission.find();
-      rolePermission.permission = permissions[0];
+      rolePermission.permission = await createPermission();
       await rolePermission.save();
     } catch (e) {
       expect(e.message).toEqual(
@@ -326,13 +291,10 @@ describe("typeorm test", () => {
   });
 
   it("should get permissions and roles with join from RolePermission", async function() {
+    await createRolePermission();
     const rolePermissions = await RolePermission.findAll();
     expect(
       rolePermissions[0].role && rolePermissions[0].permission
     ).toBeTruthy();
   });
 });
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
