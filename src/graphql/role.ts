@@ -1,5 +1,20 @@
-import { Role } from "../entity/Role";
 import { gql } from "apollo-server";
+import Role from "../entity/Role";
+
+// GET /roles
+function getRoles(): Promise<Role[]> {
+  return Role.find();
+}
+
+// GET /role
+function getRole(args: Role): Promise<Role | undefined> {
+  return Role.findOne(args);
+}
+
+// POST /role
+function postRole(args: Role): Promise<Role> {
+  return Role.create(args).save();
+}
 
 export const typeDefs = gql`
   extend type Query {
@@ -19,31 +34,16 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    roles() {
+    roles(): Promise<Role[]> {
       return getRoles();
     },
-    async role(_parent: any, args: any) {
+    role(_parent: void, args: Role): Promise<Role | undefined> {
       return getRole(args);
-    }
+    },
   },
   Mutation: {
-    role(_parent: any, args: any) {
+    role(_parent: void, args: Role): Promise<Role> {
       return postRole(args);
-    }
-  }
+    },
+  },
 };
-
-// GET /roles
-function getRoles() {
-  return Role.find();
-}
-
-// GET /role
-function getRole(args: any) {
-  return Role.findOne(args);
-}
-
-// POST /role
-function postRole(args: any) {
-  return Role.create(args).save();
-}
