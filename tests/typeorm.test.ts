@@ -1,9 +1,9 @@
 import argon2 from "argon2";
-import { Permission } from "../src/entity/Permission";
-import { Role } from "../src/entity/Role";
-import { RolePermission } from "../src/entity/RolePermission";
-import { User } from "../src/entity/User";
-import { UserRole } from "../src/entity/UserRole";
+import Permission from "../src/entity/Permission";
+import Role from "../src/entity/Role";
+import RolePermission from "../src/entity/RolePermission";
+import User from "../src/entity/User";
+import UserRole from "../src/entity/UserRole";
 import {
   createPermission,
   createRole,
@@ -14,17 +14,19 @@ import {
   email,
   password,
   permissionName,
-  roleName
+  roleName,
 } from "./helpers";
 import "./init";
 
-describe("typeorm test", () => {
-  it("should create user", async function() {
+describe("typeorm test", (): void => {
+  it("should create user", async (): Promise<void> => {
     const user = await createUser();
     expect(user.id).toBeTruthy();
   });
 
-  it("should fail while creating user because of empty email", async function() {
+  it("should fail while creating user because of empty email", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const user = new User();
@@ -32,12 +34,14 @@ describe("typeorm test", () => {
       await user.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "email" violates not-null constraint'
+        'null value in column "email" violates not-null constraint',
       );
     }
   });
 
-  it("should fail while creating user because of empty password", async function() {
+  it("should fail while creating user because of empty password", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const user = new User();
@@ -45,26 +49,30 @@ describe("typeorm test", () => {
       await user.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "password" violates not-null constraint'
+        'null value in column "password" violates not-null constraint',
       );
     }
   });
 
-  it("should fail while creating user because of duplicate email", async function() {
+  it("should fail while creating user because of duplicate email", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       await createUser();
       await createUser();
     } catch (e) {
       expect(e.message).toMatch(
-        "duplicate key value violates unique constraint"
+        "duplicate key value violates unique constraint",
       );
     }
   });
 
-  it("should have an update and creation timestamp with the same value", async function() {
+  it("should have an update and creation timestamp with the same value", async (): Promise<
+    void
+  > => {
     const user = new User();
-    user.email = email + "equalTimestamp";
+    user.email = `${email}equalTimestamp`;
     user.password = password;
     await user.save();
     expect(user.createdAt).toBeTruthy();
@@ -72,99 +80,114 @@ describe("typeorm test", () => {
     expect(user.createdAt).toEqual(user.updatedAt);
   });
 
-  it("should have different creation and update timestamps after update", async function() {
+  it("should have different creation and update timestamps after update", async (): Promise<
+    void
+  > => {
     const user = new User();
-    user.email = email + "differentTimestamp";
+    user.email = `${email}differentTimestamp`;
     user.password = password;
     await user.save();
     await delay(3000);
-    user.password = password + "differentTimestamp";
+    user.password = `${password}differentTimestamp`;
     await user.save();
     expect(user.updatedAt).not.toEqual(user.createdAt);
   });
 
-  it("should create role", async function() {
+  it("should create role", async (): Promise<void> => {
     const role = new Role();
     role.name = roleName;
     await role.save();
     expect(role.id).toBeTruthy();
   });
 
-  it("should fail creating role because of empty name", async function() {
+  it("should fail creating role because of empty name", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const role = new Role();
       await role.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "name" violates not-null constraint'
+        'null value in column "name" violates not-null constraint',
       );
     }
   });
 
-  it("should fail creating role because of duplicate name", async function() {
+  it("should fail creating role because of duplicate name", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       await createRole();
       await createRole();
     } catch (e) {
       expect(e.message).toMatch(
-        "duplicate key value violates unique constraint"
+        "duplicate key value violates unique constraint",
       );
     }
   });
 
-  it("should create permission", async function() {
+  it("should create permission", async (): Promise<void> => {
     const permission = new Permission();
     permission.name = permissionName;
     await permission.save();
     expect(permission.id).toBeTruthy();
   });
 
-  it("should fail creating permission because of empty name", async function() {
+  it("should fail creating permission because of empty name", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const permission = new Permission();
       await permission.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "name" violates not-null constraint'
+        'null value in column "name" violates not-null constraint',
       );
     }
   });
 
-  it("should fail creating permission because of duplicate name", async function() {
+  it("should fail creating permission because of duplicate name", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       await createPermission();
       await createPermission();
     } catch (e) {
       expect(e.message).toMatch(
-        "duplicate key value violates unique constraint"
+        "duplicate key value violates unique constraint",
       );
     }
   });
 
-  it("should create UserRole", async function() {
+  it("should create UserRole", async (): Promise<void> => {
     const userRole = await createUserRole();
     expect(userRole.id).toBeTruthy();
   });
 
-  it("should fail to create UserRole because of empty user", async function() {
+  it("should fail to create UserRole because of empty user", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const userRole = new UserRole();
       const roles = await Role.find();
-      userRole.role = roles[0];
+      const [role] = roles;
+      userRole.role = role;
       await userRole.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "userId" violates not-null constraint'
+        'null value in column "userId" violates not-null constraint',
       );
     }
   });
 
-  it("should fail to create UserRole because of empty role", async function() {
+  it("should fail to create UserRole because of empty role", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const userRole = new UserRole();
@@ -172,12 +195,14 @@ describe("typeorm test", () => {
       await userRole.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "roleId" violates not-null constraint'
+        'null value in column "roleId" violates not-null constraint',
       );
     }
   });
 
-  it("should get users and roles with join from UserRole", async function() {
+  it("should get users and roles with join from UserRole", async (): Promise<
+    void
+  > => {
     await createUserRole();
     const userRoles = await UserRole.findAll();
     expect(userRoles[0].role && userRoles[0].user).toBeTruthy();
@@ -194,12 +219,12 @@ describe("typeorm test", () => {
   //   expect(userRole.id).toBeFalsy();
   // });
 
-  it("should hash user password", async function() {
+  it("should hash user password", async (): Promise<void> => {
     const user = await createUser();
     expect(await argon2.verify(user.password, password)).toEqual(true);
   });
 
-  it("should hash user password after update", async function() {
+  it("should hash user password after update", async (): Promise<void> => {
     const arg = "hashedPasswordAfterUpdate";
     const user = await createUser();
     user.password = password + arg;
@@ -259,12 +284,14 @@ describe("typeorm test", () => {
   //   expect(user.id).toBeTruthy();
   // });
 
-  it("should create RolePermission", async function() {
+  it("should create RolePermission", async (): Promise<void> => {
     const rolePermission = await createRolePermission();
     expect(rolePermission.id).toBeTruthy();
   });
 
-  it("should fail to create RolePermission because of empty permission", async function() {
+  it("should fail to create RolePermission because of empty permission", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const rolePermission = new RolePermission();
@@ -272,12 +299,14 @@ describe("typeorm test", () => {
       await rolePermission.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "permissionId" violates not-null constraint'
+        'null value in column "permissionId" violates not-null constraint',
       );
     }
   });
 
-  it("should fail to create RolePermission because of empty role", async function() {
+  it("should fail to create RolePermission because of empty role", async (): Promise<
+    void
+  > => {
     expect.assertions(1);
     try {
       const rolePermission = new RolePermission();
@@ -285,16 +314,18 @@ describe("typeorm test", () => {
       await rolePermission.save();
     } catch (e) {
       expect(e.message).toEqual(
-        'null value in column "roleId" violates not-null constraint'
+        'null value in column "roleId" violates not-null constraint',
       );
     }
   });
 
-  it("should get permissions and roles with join from RolePermission", async function() {
+  it("should get permissions and roles with join from RolePermission", async (): Promise<
+    void
+  > => {
     await createRolePermission();
     const rolePermissions = await RolePermission.findAll();
     expect(
-      rolePermissions[0].role && rolePermissions[0].permission
+      rolePermissions[0].role && rolePermissions[0].permission,
     ).toBeTruthy();
   });
 });
