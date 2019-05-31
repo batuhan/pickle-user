@@ -9,6 +9,7 @@
       "prettier",
       "prettier/@typescript-eslint",
     ],
+  rules: { "@typescript-eslint/no-require-imports": "error" },
   "settings":
     { "import/resolver": { "node": { "extensions": [".js", ".ts"] } } },
 }
