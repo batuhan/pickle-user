@@ -59,12 +59,13 @@ describe("apollo tests", (): void => {
     const user = await createUser();
     const result = await query({
       query: gql`
-        query {
-          user(id: "${user.id}") {
+        query($id: ID) {
+          user(id: $id) {
             id
           }
         }
       `,
+      variables: { id: user.id },
     });
     expect(result.data && result.data.user.id).toEqual(user.id);
   });
@@ -90,13 +91,16 @@ describe("apollo tests", (): void => {
     const user = await createUser();
     const result = await query({
       query: gql`
-        query {
-          user(id: "${user.id}") {
+        query($id: ID) {
+          user(id: $id) {
             id
             password
           }
         }
       `,
+      variables: {
+        id: user.id,
+      },
     });
     if (result.data) {
       expect(result.data.user.password).toBeFalsy();
@@ -107,12 +111,13 @@ describe("apollo tests", (): void => {
     const user = await createUser();
     const result = await query({
       query: gql`
-        query {
-          user(email: "${user.email}") {
+        query($email: String) {
+          user(email: $email) {
             id
           }
         }
       `,
+      variables: { email: user.email },
     });
     expect(result.data && result.data.user.id).toEqual(user.id);
   });
@@ -120,13 +125,14 @@ describe("apollo tests", (): void => {
   it("should create user", async (): Promise<void> => {
     const result = await mutate({
       mutation: gql`
-      mutation {
-  user(email: "${generateRandomString(5)}", 
-    password: "${generateRandomString(5)}") {
-    id
-  }
-}
-`,
+        mutation($email: String!, $password: String!) {
+          signup(email: $email, password: $password)
+        }
+      `,
+      variables: {
+        email: generateRandomString(5),
+        password: generateRandomString(5),
+      },
     });
     expect(
       await User.find({ id: result.data && result.data.user.id }),
@@ -151,12 +157,15 @@ describe("apollo tests", (): void => {
   it("should create role", async (): Promise<void> => {
     const result = await mutate({
       mutation: gql`
-      mutation {
-  role(name: "${generateRandomString(5)}") {
-    id
-  }
-}
-`,
+        mutation($name: String!) {
+          role(name: $name) {
+            id
+          }
+        }
+      `,
+      variables: {
+        name: generateRandomString(5),
+      },
     });
     expect(
       await Role.find({ id: result.data && result.data.role.id }),
@@ -167,12 +176,13 @@ describe("apollo tests", (): void => {
     const role = await createRole();
     const result = await query({
       query: gql`
-query {
-  role(name: "${role.name}") {
-    id
-  }
-}
-`,
+        query($name: String!) {
+          role(name: $name) {
+            id
+          }
+        }
+      `,
+      variables: { name: role.name },
     });
     expect(result.data && result.data.role.id).toEqual(role.id);
   });
