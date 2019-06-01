@@ -24,8 +24,10 @@
     "pre-commit": "lint-staged -c .lint-stagedrc.yml && pretty-quick"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/graphql": "^14.2.0",
     "@types/jest": "^24.0.13",
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.132",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
@@ -47,7 +49,9 @@
   "dependencies": {
     "apollo-server": "^2.5.0",
     "argon2": "^0.23.0",
+    "dotenv": "^8.0.0",
     "graphql": "^14.3.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
