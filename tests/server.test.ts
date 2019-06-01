@@ -11,6 +11,7 @@ import {
   populateUsers,
 } from "./helpers";
 import "./init";
+import { verify } from "../src/helpers/jwt";
 
 const { query, mutate } = createTestClient(app);
 
@@ -134,9 +135,23 @@ describe("apollo tests", (): void => {
         password: generateRandomString(5),
       },
     });
-    expect(
-      await User.find({ id: result.data && result.data.user.id }),
-    ).toBeTruthy();
+    const id = verify(result.data && result.data.signup).sub;
+    expect(await User.find({ id })).toBeTruthy();
+  });
+
+  it("should verify jwt after creating user", async (): Promise<void> => {
+    const result = await mutate({
+      mutation: gql`
+        mutation($email: String!, $password: String!) {
+          signup(email: $email, password: $password)
+        }
+      `,
+      variables: {
+        email: generateRandomString(5),
+        password: generateRandomString(5),
+      },
+    });
+    expect(verify(result.data && result.data.signup).sub).toBeTruthy();
   });
 
   it("should get all roles", async (): Promise<void> => {
