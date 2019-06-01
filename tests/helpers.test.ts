@@ -25,4 +25,13 @@ describe("helper tests", (): void => {
     const verified = verify("");
     expect(verified).toEqual({});
   });
+
+  it("should fail to verify with bad token", async (): Promise<void> => {
+    expect.assertions(1);
+    try {
+      verify("123456");
+    } catch (e) {
+      expect(e.message).toEqual("jwt malformed");
+    }
+  });
 });
