@@ -24,4 +24,16 @@ export function sign(subject: string): string {
   return "";
 }
 
-export function verify(): void {}
+export function verify(token: string): JWT {
+  if (token) {
+    const result = jwt.verify(token, secret, { issuer });
+    if (result && result instanceof Object) {
+      return result;
+    }
+  }
+  return {};
+}
+
+interface JWT {
+  sub?: string;
+}
