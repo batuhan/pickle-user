@@ -1,26 +1,25 @@
 import { Entity, Column, BeforeInsert, BeforeUpdate } from "typeorm";
-import { PickleUserBaseEntity } from "./PickleUserBaseEntity";
 import argon2, { argon2id } from "argon2";
+import PickleUserBaseEntity from "./PickleUserBaseEntity";
+
+async function hash(password: string): Promise<string> {
+  if (password) {
+    return argon2.hash(password, { type: argon2id });
+  }
+  return password;
+}
 
 @Entity()
-export class User extends PickleUserBaseEntity {
+export default class User extends PickleUserBaseEntity {
   @Column({ unique: true })
-  email!: string;
+  public email!: string;
 
   @Column()
-  password!: string;
+  public password!: string;
 
   @BeforeInsert()
   @BeforeUpdate()
-  async userHooks() {
+  public async userHooks(): Promise<void> {
     this.password = await hash(this.password);
-  }
-}
-
-async function hash(password: string) {
-  if (password) {
-    return await argon2.hash(password, { type: argon2id });
-  } else {
-    return password;
   }
 }

@@ -7,3 +7,8 @@ services:
 
 before_install:
   - docker run --name pickle-user-postgres-test -p 5433:5432 -e POSTGRES_DB="pickle-user-test" -d postgres
+
+script:
+  - yarn build
+  - yarn lint
+  - yarn test

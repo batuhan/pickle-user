@@ -1,7 +1,7 @@
-import * as role from "./role";
-import * as user from "./user";
 import { merge } from "lodash";
 import { gql } from "apollo-server";
+import * as role from "./role";
+import * as user from "./user";
 
 const base = gql`
   type Query

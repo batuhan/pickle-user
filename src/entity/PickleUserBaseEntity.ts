@@ -3,19 +3,19 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 
-export class PickleUserBaseEntity extends BaseEntity {
+export default class PickleUserBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  public id!: string;
 
   @Column({ default: true })
-  isActive!: boolean;
+  public isActive!: boolean;
 
   @CreateDateColumn()
-  createdAt!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  public updatedAt!: Date;
 }
