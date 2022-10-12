@@ -47,7 +47,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "apollo-server": "^2.5.0",
+    "apollo-server": "^2.25.4",
     "argon2": "^0.23.0",
     "dotenv": "^8.0.0",
     "graphql": "^14.3.0",
